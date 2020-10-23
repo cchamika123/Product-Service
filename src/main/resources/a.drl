@@ -1,0 +1,34 @@
+
+package droolsexample
+
+
+package com.dush.productservice.model.Product;
+import java.math.BigDecimal;
+
+// declare any global variables here
+dialect "java"
+rule "calculate total product"
+   when
+      product : Product (name == "A", units > 0)
+   then
+   
+   	  int cartonCount=product.getCarton();
+   	  int unitCount=product.getUnits();
+   	  
+   	  cartonCount = cartonCount + cartonCount/20;
+   	  unitCount = unitCount%20;
+   	  
+   	  BigDecimal total = new BigDecimal(0.0);
+   	  BigDecimal totalCartoonPrice = new BigDecimal(0.0);
+   	  BigDecimal totalUnitPrice = new BigDecimal(0.0);
+   	  
+   	  totalCartoonPrice =  product.getCartonPrice().multiply(BigDecimal.valueOf(cartonCount));
+   	  totalUnitPrice =  product.getCartonPrice().multiply(BigDecimal.valueOf(0.3)).add(product.getCartonPrice()).divide(BigDecimal.valueOf(20)).multiply(BigDecimal.valueOf(unitCount));
+   	  
+   	  total= total.add(totalCartoonPrice).add(totalUnitPrice);
+   	  
+   	  product.setCarton(cartonCount);
+   	  product.setUnitPrice(unitCount);
+   	  product.setTotalPrice(total);
+ 
+end
